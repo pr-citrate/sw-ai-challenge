@@ -5,6 +5,12 @@ import folium
 from streamlit_folium import st_folium
 
 
+@st.cache_resource
+def fetch() -> dict:
+    data: dict = get_data()
+    return data
+
+
 def main() -> None:
     st.set_page_config(layout="wide")
     st.markdown(
@@ -45,7 +51,7 @@ def main() -> None:
 
     st.button("검색", on_click=search)
 
-    data: dict = get_data()
+    data: dict = fetch()
 
     df: pd.DataFrame = pd.DataFrame(data["HeatWaveShelter"][1]["row"])
 
