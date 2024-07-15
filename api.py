@@ -7,7 +7,7 @@ KEY = os.getenv("KEY")
 
 def get_data() -> dict:
     try:
-        response = requests.get(
+        response: requests.Response = requests.get(
             f"http://apis.data.go.kr/1741000/HeatWaveShelter3/getHeatWaveShelterList3?ServiceKey={KEY}&year=2024&areaCd=5214040000&type=json&pageNo=1&numOfRows=20",
             headers={
                 "Content-Type": "*/*",
@@ -18,13 +18,9 @@ def get_data() -> dict:
             timeout=10,
         )
 
-        # print(response.status_code)  # Check the status
+        response.raise_for_status()
 
-        response.raise_for_status()  # Check if the request was successful
-
-        data = response.json()
-        # print(json.dumps(data, indent=2))
-
+        data: dict = response.json()
         return data
 
     except requests.exceptions.SSLError as ssl_err:
@@ -36,5 +32,5 @@ def get_data() -> dict:
 
 
 if __name__ == "__main__":
-    data = get_data()
+    data: dict = get_data()
     print(json.dumps(data, indent=2))
