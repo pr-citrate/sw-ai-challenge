@@ -12,6 +12,9 @@ def fetch() -> dict:
 
 
 def main() -> None:
+    def handleButtonOnClick():
+        st.session_state.search_button = True
+
     st.set_page_config(layout="wide")
     st.markdown(
         """
@@ -36,20 +39,18 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    st.title("무더위쉼터 정보")
+    st.title("바람터")
+    st.subheader("주변 무더위 쉼터를 한 눈에", divider="rainbow")
+    st.write("<div style='height: 2.5rem;' />", unsafe_allow_html=True)
 
-    st.write("---")
-    st.write("## 검색하기")
+    st.write("검색하기")
 
     search_query: str = st.text_input("검색어를 입력하세요", "익산시 금마면")
 
     if "search_button" not in st.session_state:
         st.session_state.search_button = False
 
-    def search():
-        st.session_state.search_button = True
-
-    st.button("검색", on_click=search)
+    st.button("검색", on_click=handleButtonOnClick)
 
     data: dict = fetch()
 
@@ -67,7 +68,7 @@ def main() -> None:
 
     if st.session_state.search_button:
         st.write("---")
-        st.write("## 지도 보기")
+        st.header("지도 보기")
 
         map_df: pd.DataFrame = df[["이름", "위도", "경도"]]
         display_df: pd.DataFrame = df.drop(columns=["위도", "경도"])
@@ -93,6 +94,8 @@ def main() -> None:
         display_df.index += 1
 
         st_folium(map, width=700, height=500)
+
+        st.write("## 표로 보기")
         styled_df: pd.DataFrame = display_df.style.set_table_styles(
             [{"selector": "th, td", "props": [("font-size", "1.5rem")]}]
         )
