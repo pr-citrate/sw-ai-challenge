@@ -43,7 +43,7 @@ def main() -> None:
     st.subheader("주변 무더위 쉼터를 한 눈에", divider="rainbow")
     st.write("<div style='height: 2.5rem;' />", unsafe_allow_html=True)
 
-    st.write("검색하기")
+    st.header("검색하기")
 
     search_query: str = st.text_input("검색어를 입력하세요", "익산시 금마면")
 
